@@ -37,17 +37,13 @@ button {
   background-color: #007BFF;
   color: white;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.0s;
   width: 100%; /* Take up full width of grid cell */
   height: 50px; /* Fixed height */
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-button:hover {
-  background-color: #0056b3;
 }
 
 audio {
@@ -81,4 +77,12 @@ audio {
     height: 60px; /* Reduce button and select height on small screens */
     font-size: 1.25em; /* Reduce font size on small screens */
   }
+}
+
+.correct {
+  background-color: #51AD52;
+}
+
+.incorrect {
+  background-color: #FF1A1A;
 }

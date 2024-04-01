@@ -65,7 +65,6 @@ function C2KRP() {
     }
   }, [currentQuestion, data, mode]);
   
-
   const handleChoiceClick = (choice, event) => {
     // Prevent the click event from propagating up to the parent elements
     event.stopPropagation();
@@ -73,8 +72,34 @@ function C2KRP() {
     setLastCorrectAnswer(data[currentQuestion][mode]);
     setMeaning(data[currentQuestion]['meaning']);
     // Move on to the next question
-    setCurrentQuestion(currentQuestion + 1);
+    setTimeout(() => setCurrentQuestion(currentQuestion + 1), 300);
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Define your shortcut keys
+      const shortcutKeys = ['1', '2', '3', '4'];
+      const key = event.key;
+  
+      if (shortcutKeys.includes(key)) {
+        // Find the index of the pressed key in the shortcutKeys array
+        const index = shortcutKeys.indexOf(key);
+  
+        // Check if the button for the pressed key exists
+        if (choices[index]) {
+          handleChoiceClick(choices[index], event);
+        }
+      }
+    };
+  
+    // Add the event listener when the component mounts
+    window.addEventListener('keydown', handleKeyDown);
+  
+    // Remove the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [choices, handleChoiceClick]);  
 
   const handleTextClick = () => {
     setIsBlur(!isBlur);
@@ -105,10 +130,15 @@ function C2KRP() {
         {lastTakenAnswer!==lastCorrectAnswer ? ` [${lastCorrectAnswer} - ${meaning}]` : ''}
       </p>
       <div className="choices">
-        {choices.map((choice, index) => (
-          <button key={index} onClick={(event) => handleChoiceClick(choice, event)}>
-            {choice}
-          </button>
+      {choices.map((choice, index) => (
+        <button
+          key={index}
+          className={lastTakenAnswer === choice ? (lastTakenAnswer===lastCorrectAnswer ? 'correct' : 'incorrect') : ''}
+          onClick={(event) => handleChoiceClick(choice, event)}
+          title={`Shortcut: ${index+1}`} // Displaying the shortcut key on hover
+        >
+          {choice}
+        </button>
         ))}
       </div>
       <audio ref={audioRef} controls src={audioSrc}>
